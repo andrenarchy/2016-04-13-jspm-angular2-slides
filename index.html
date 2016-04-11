@@ -16,6 +16,11 @@
     <script src="bower_components/angular-slidedeck/angular-slidedeck.min.js"></script>
     <link rel="stylesheet" href="bower_components/angular-slidedeck/angular-slidedeck.min.css">
 
+    <!-- highlightjs has no bower package :( --->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script src="bower_components/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/dark.min.css">
+
     <!-- initialize angular (your own js and css) -->
     <script src="index.js"></script>
     <link rel="stylesheet" href="index.css">
@@ -48,13 +53,23 @@
       <slide>
         <div class="row">
           <div class="col-md-12 box text-center">
-            <h1>History: CommonJS</h1>
+            <h1>Modules</h1>
           </div>
         </div>
         <div class="row sm-margin-top">
-          <div class="col-md-12 box">
-            <pre>var _ = require('lodash');</pre>
+          <div class="col-md-6">
+            <div class="box">
+              <h2 class="text-center">CommonJS<p><small>(History)</small></p></h2>
+              <div hljs hljs-language="javascript">var _ = require('lodash');
+var clones = _.clone(people);</div>
+            </div>
           </div>
+          <div class="col-md-6">
+            <div class="box">
+              <h2 class="text-center">ES2015, TypeScript<p><small>(Future)</small></p></h2>
+              <div hljs hljs-language="javascript">import { clone } from 'lodash';
+const clones = clone(people);</div>
+            </div>
         </div>
       </slide>
 
