@@ -8,6 +8,10 @@ body {
   background-color: black;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .slide {
   color: white;
 }
@@ -66,11 +70,11 @@ body {
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 56px;
   font-weight: 800;
 }
 h2 {
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 600;
 }
 h3 {
