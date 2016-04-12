@@ -28,11 +28,13 @@
   <body ng-cloak>
     <slides>
 
-      <slide>
+      <slide class="container-fluid">
         <div class="row">
-          <div class="col-md-12 box text-center">
-            <h1>Look ma, no build system!</h1>
-            <h2>JSPM/SystemJS + Angular 2</h2>
+          <div class="col-md-12">
+            <div class="box text-center">
+              <h1>Look ma, no build system!</h1>
+              <h2>JSPM/SystemJS + Angular 2</h2>
+            </div>
           </div>
         </div>
         <div class="row sm-margin-top">
@@ -49,7 +51,7 @@
               </div>
               <div class="col-md-6">
                 <a href="http://berlin.freifunk.net">
-                  <img src="img/freifunk.svg" style="height: 2.8em;">
+                  <img src="img/freifunk.svg" style="height: 2.8em; border-radius: 0.3em;">
                 </a>
                 (activist)
               </div>
@@ -59,36 +61,80 @@
       </slide>
 
       <slide>
-        <div class="row">
-          <div class="col-md-12 box text-center">
-            <h1>Modules</h1>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Modules</h1>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row sm-margin-top">
-          <div class="col-md-6">
-            <div class="box">
-              <h2 class="text-center">CommonJS</h2>
-              <div hljs hljs-no-escape hljs-language="javascript">// math.js
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">CommonJS</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">// math.js
 exports.fibo = function fibo(n) {
   if (n &lt;= 1) return n;
   return fibo(n - 1) + fibo(n - 2);
 }</div>
-              <div hljs hljs-no-escape hljs-language="javascript">var math = require('./math');
+                <div hljs hljs-no-escape hljs-language="javascript">var math = require('./math');
 console.log(math.fibo(4)); // 3</div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="box">
-              <h2 class="text-center">ES2015, TypeScript</h2>
-              <div hljs hljs-no-escape hljs-language="javascript">// math.js
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">ES2015</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">// math.js
 export function fibo(n) {
   if (n &lt;= 1) return n;
   return fibo(n - 1) + fibo(n - 2);
 }</div>
-              <div hljs hljs-no-escape hljs-language="javascript">import { fibo } from './math';
+                <div hljs hljs-no-escape hljs-language="javascript">import { fibo } from './math';
 console.log(fibo(4)); // 3</div>
+              </div>
             </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Modules</h1>
+              </div>
             </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">CommonJS</h2>
+                <ul>
+                  <li>Used in NodeJS</li>
+                  <li>Not part of JS standard</li>
+                  <li>No browser support</li>
+                  <li>Bundling tools like
+                    <a href="http://browserify.org/">browserify</a> or
+                    <a href="https://webpack.github.io/">webpack</a> required
+                  </li>
+                  <li>Build giant JS file with all dependencies</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">ES2015</h2>
+                <ul>
+                  <li>Part of current JS standard (ES2015===ES6)</li>
+                  <li>Browser support coming soon™</li>
+                  <li>On-demand module loading with <code>System.import()</code></li>
+                  <li>Polyfill: <a href="https://github.com/systemjs/systemjs">SystemJS</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </slide>
 
