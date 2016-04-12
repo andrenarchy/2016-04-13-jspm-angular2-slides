@@ -17,6 +17,10 @@ code {
   color: white;
 }
 
+blockquote {
+  font-size: 24px;
+}
+
 .slide {
   color: white;
   padding: 20px;
