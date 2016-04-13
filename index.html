@@ -394,7 +394,7 @@ $ jspm install angular2</div>
                 <div hljs hljs-language="json" class="code-small">{
   "compilerOptions": {
     "target": "es6",
-    "module": "es6",
+    "module": "system",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": false
@@ -411,7 +411,23 @@ $ jspm install angular2</div>
             <div class="col-md-6">
               <div class="box sm-margin-top">
                 <h2 class="text-center">jspm.config.js</h2>
-                <div hljs hljs-language="json" class="code-small">
+                <div hljs hljs-language="javascript" class="code-small">SystemJS.config({
+  transpiler: "plugin-typescript",
+  typescriptOptions: {
+    "tsconfig": true
+  },
+  packages: {
+    "app": {
+      "main": "entry.ts",
+      "defaultExtension": "ts",
+      "meta": {
+        "*.ts": {
+          "loader": "plugin-typescript"
+        }
+      }
+    }
+  }
+});
 </div>
               </div>
             </div>
@@ -506,10 +522,8 @@ bootstrap(MainComponent);</div>
               <div class="box">
                 <blockquote class="blockquote-reverse">
                   <p>
-                    But wait, loading hundreds of small modules via HTTP will
-                    take forever!<br>
-                    Screw this ES2015 bs, I will continue to bundle
-                    a giant js file!
+                    Loading hundreds of small modules via HTTP takes forever!<br>
+                    Screw JSPM, I will continue to bundle a giant js file!
                   </p>
                   <footer>a concerned HTTP user</footer>
                 </blockquote>
@@ -519,10 +533,12 @@ bootstrap(MainComponent);</div>
           <div class="row">
             <div class="col-md-12">
               <div class="box sm-margin-top">
-                <h2>HTTP/2 is here!</h2>
+                <h2>Solution: HTTP/2</h2>
                 <ul>
                   <li>Multiplexes multiple requests over single TCP connection</li>
                   <li><a href="http://caniuse.com/#feat=http2">Major browsers support HTTP/2</a></li>
+                  <li>Popular web servers support HTTP/2, e.g., nginx</li>
+                  <li><strong>But we still need an HTTP/2 dev server! Anyone?</strong></li>
                 </ul>
               </div>
             </div>
@@ -612,11 +628,13 @@ bootstrap(MainComponent);</div>
             </div>
           </div>
           <div class="row sm-margin-top">
-            <div class="col-md-12">
+            <div class="col-md-8 col-md-offset-2">
               <div class="box">
                 <ul>
-                  <li>Hot reloading: only reload modules that changed</li>
+                  <li>Hot reloading: only reload modules that changed – while
+                    maintaining the app's state</li>
                   <li>TypeScript with ES2016 (ES7!): <code>async/await</code>!</li>
+                  <li>Loading of assets (CSS, HTML, Jade, ...)</li>
                 </ul>
               </div>
             </div>
@@ -654,7 +672,7 @@ bootstrap(MainComponent);</div>
             <a href="https://paperhive.org">
               <img src="img/paperhive.svg" style="height: 1.5em; vertical-align: bottom;">
             </a>
-            is hiring AngularJS devs! :D
+            is hiring Angular devs! :D
            </div>
         </div>
       </slide>
