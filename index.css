@@ -17,6 +17,10 @@ code {
   color: white;
 }
 
+.code-small code {
+  font-size: 12px;
+}
+
 blockquote {
   font-size: 24px;
 }
