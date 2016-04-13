@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html ng-app="JspmAngular2">
+  <head>
+    <title>JSPM/SystemJS + Angular2 – André Gaul</title>
+    <meta charset="UTF-8">
+
+    <!-- bootstrap, font -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,600,800">
+
+    <!-- angular-slidedeck and dependencies-->
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-slidedeck/angular-slidedeck.min.js"></script>
+    <link rel="stylesheet" href="bower_components/angular-slidedeck/angular-slidedeck.min.css">
+
+    <!-- highlightjs has no bower package :( --->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script src="bower_components/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/tomorrow-night.min.css">
+
+    <!-- initialize angular (your own js and css) -->
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body ng-cloak>
+    <slides>
+
+      <slide class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box text-center">
+              <h1>Look ma, no build system!</h1>
+              <h2>JSPM/SystemJS + Angular 2</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row sm-margin-top">
+          <div class="col-md-6 col-md-offset-3 box text-center">
+            <img src="img/andre.jpg" class="img-circle" style="max-width: 90px">
+            <h3 style="margin-top: 0.5em;">André Gaul</h3>
+            <p><a href="https://twitter.com/andrenarchy">@andrenarchy</a></p>
+            <div class="row text-muted">
+              <div class="col-md-6">
+                <a href="https://paperhive.org">
+                  <img src="img/paperhive.svg" style="height: 1.5em; vertical-align: bottom;">
+                </a><br>
+                <small>(CEO)</small>
+              </div>
+              <div class="col-md-6">
+                <a href="http://berlin.freifunk.net">
+                  <img src="img/freifunk.svg" style="height: 2.5em; border-radius: 0.3em;">
+                </a><br>
+                <small>(activist)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Modules</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">CommonJS</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">// math.js
+exports.fibo = function fibo(n) {
+  if (n &lt;= 1) return n;
+  return fibo(n - 1) + fibo(n - 2);
+}</div>
+                <div hljs hljs-no-escape hljs-language="javascript">var math = require('./math');
+
+
+console.log(math.fibo(4)); // 3</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">ES2015</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">// math.js
+export function fibo(n) {
+  if (n &lt;= 1) return n;
+  return fibo(n - 1) + fibo(n - 2);
+}</div>
+                <div hljs hljs-no-escape hljs-language="javascript">import { fibo } from './math';
+
+
+console.log(fibo(4)); // 3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Modules</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">CommonJS</h2>
+                <ul>
+                  <li>No browser support!</li>
+                  <li>Used in NodeJS</li>
+                  <li>Not part of JS standard</li>
+                  <li>Bundling tools like
+                    <a href="http://browserify.org/">browserify</a> or
+                    <a href="https://webpack.github.io/">webpack</a> required
+                  </li>
+                  <li>Build giant JS file with all dependencies</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">ES2015</h2>
+                <ul>
+                  <li>No browser support (yet)!</li>
+                  <li>Part of current JS standard (ES2015===ES6)</li>
+                  <li>Browser support coming soon™</li>
+                  <li>On-demand module loading with <code>System.import()</code></li>
+                  <li>Polyfill: <a href="https://github.com/systemjs/systemjs">SystemJS</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Module system challenges</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <ul>
+                  <li>Resolve dependency tree</li>
+                  <li>
+                    Locate external dependencies:
+                    what is this <code>'lodash'</code> module in
+                    <div hljs>import { find } from 'lodash';</div>
+                    ?
+                  </li>
+                  <li>
+                    Multiple sources: npm, github (bower!),
+                    <code>${wtfpm}</code>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <ul>
+                  <li>
+                    Multiple module systems:
+                    <ul>
+                      <li>ES2015</li>
+                      <li>CommonJS</li>
+                      <li>AMD</li>
+                      <li>no module system<br>(global variables)</li>
+                    </ul>
+                  </li>
+                  <li>
+                    Multiple languages: transpile with TypeScript, Babel, ...
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>JSPM + SystemJS = &lt;3</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">JSPM</h2>
+                <ul>
+                  <li>Meta package manager</li>
+                  <li>Supported out-of-the box: npm and github (bower!)</li>
+                  <li>Flat dependencies</li>
+                  <li>Provides package overrides</li>
+                  <li>Generates SystemJS config</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">SystemJS</h2>
+                <ul>
+                  <li>Reads generated config</li>
+                  <li>Fetches module files from own server or CDN</li>
+                  <li>Transpiles modules</li>
+                  <li>Just works™</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>I want to see code. Now!</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: ES2015</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">Get started</h2>
+                <div hljs hljs-language="bash">$ npm install -g jspm@beta
+$ jspm init
+# directories.lib: app
+# local package main: entry.js</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: ES2015</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">index.html</h2>
+                <div hljs hljs-no-escape hljs-language="html">&lt;body&gt;
+  &lt;script src="jspm_packages/system.js"&gt;&lt;/script&gt;
+  &lt;script src="jspm.browser.js"&gt;&lt;/script&gt;
+  &lt;script src="jspm.config.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    System.import('app')
+      .catch(console.error.bind(console));
+  &lt;/script&gt;
+&lt;/body&gt;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: ES2015</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">app/entry.js</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">import { fibo } from './math';
+
+
+console.log(fibo(4)); // 3</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">app/math.js</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">export function fibo(n) {
+  if (n &lt;= 1) return n;
+  return fibo(n - 1) + fibo(n - 2);
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: ES2015</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">Install external module</h2>
+                <div hljs hljs-language="bash">$ jspm install lodash</div>
+                <h2 class="text-center">app/entry.js</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">import { range } from 'lodash';
+import { fibo } from './math';
+
+
+const numbers = range(5).map(fibo);
+console.log(numbers); // [0, 1, 1, 2, 3]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: TypeScript + Angular2</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">Get started</h2>
+                <div hljs hljs-no-escape hljs-language="bash">$ npm install -g jspm@beta
+$ jspm init
+# directories.lib: app
+# local package main: entry.ts
+# transpiler: typescript
+
+
+$ jspm install angular2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: TypeScript + Angular2</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">tsconfig.json</h2>
+                <div hljs hljs-language="json" class="code-small">{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "system",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false
+  },
+  "exclude": [
+    "jspm_packages",
+    "node_modules"
+  ],
+  "compileOnSave": false
+}
+</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">jspm.config.js</h2>
+                <div hljs hljs-language="javascript" class="code-small">SystemJS.config({
+  transpiler: "plugin-typescript",
+  typescriptOptions: {
+    "tsconfig": true
+  },
+  packages: {
+    "app": {
+      "main": "entry.ts",
+      "defaultExtension": "ts",
+      "meta": {
+        "*.ts": {
+          "loader": "plugin-typescript"
+        }
+      }
+    }
+  }
+});
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: TypeScript + Angular2</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">index.html</h2>
+                <div hljs hljs-no-escape hljs-language="html">&lt;body&gt;
+  &lt;main&gt;&lt;/main&gt; &lt;!-- add this! --&gt;
+  &lt;script src="jspm_packages/system.js"&gt;&lt;/script&gt;
+  &lt;script src="jspm.browser.js"&gt;&lt;/script&gt;
+  &lt;script src="jspm.config.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    System.import('app')
+      .catch(console.error.bind(console));
+  &lt;/script&gt;
+&lt;/body&gt;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: TypeScript + Angular2</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">app/main.ts</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">import { Component } from 'angular2/core';
+
+
+@Component({
+  selector: 'main',
+  template: '<h1>Hey AngularJS meetup!</h1>'
+})
+export class MainComponent {};</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Example: TypeScript + Angular2</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box sm-margin-top">
+                <h2 class="text-center">app/entry.ts</h2>
+                <div hljs hljs-no-escape hljs-language="javascript">import { bootstrap } from 'angular2/platform/browser';
+import { MainComponent } from './main';
+
+
+bootstrap(MainComponent);</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <blockquote class="blockquote-reverse">
+                  <p>
+                    Loading hundreds of small modules via HTTP takes forever!<br>
+                    Screw JSPM, I will continue to bundle a giant js file!
+                  </p>
+                  <footer>a concerned HTTP user</footer>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box sm-margin-top">
+                <h2>Solution: HTTP/2</h2>
+                <ul>
+                  <li>Multiplexes multiple requests over single TCP connection</li>
+                  <li><a href="http://caniuse.com/#feat=http2">Major browsers support HTTP/2</a></li>
+                  <li>Popular web servers support HTTP/2, e.g., nginx</li>
+                  <li><strong>But we still need an HTTP/2 dev server! Anyone?</strong></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Our JSPM experience</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">Development</h2>
+                <ul>
+                  <li>Let the browser do the work</li>
+                  <li>Live reloading works great with JSPM/SystemJS</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box">
+                <h2 class="text-center">Production</h2>
+                <ul>
+                  <li>
+                    Let JSPM bundle the files before deployment:
+                    <div hljs hljs-language="bash">jspm build entry.ts bundle.js</div>
+                  </li>
+                  <li>Built-in optimizations (minify, rollup) may lead to broken code!</li>
+                  <li>
+                    Alternative: dependency cache
+                    <div hljs hljs-language="bash">jspm depcache entry.ts</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Rough edges of JSPM</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-12">
+              <div class="box">
+                <ul>
+                  <li>Config is brittle (hey, it's beta!)</li>
+                  <li><code>jspm install</code> modifies <code>jspm.{browser,config}.js</code> and <code>package.json</code></li>
+                  <li>
+                    Keeping dependencies up-to-date requires manual interaction<br>
+                    (tools like <a href="https://greenkeeper.io/">greenkeeper</a>
+                    do not understand JSPM's config)
+                  </li>
+                  <li>Community small but growing</li>
+                  <li>
+                    <a href="https://github.com/guybedford">Guy Bedford</a>
+                    (JSPM+SystemJS dev) is super helpful if you run into
+                    trouble – Thanks for the awesome work, Guy!
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Not covered here</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="box">
+                <ul>
+                  <li>Hot reloading: only reload modules that changed – while
+                    maintaining the app's state</li>
+                  <li>TypeScript with ES2016 (ES7!): <code>async/await</code>!</li>
+                  <li>Loading of assets (CSS, HTML, Jade, ...)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Thanks!</h1>
+                <h2>Questions?</h2>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-8 col-md-offset-2 box text-center">
+              <h3>André Gaul</h3>
+              <p>
+                <a href="https://twitter.com/andrenarchy">@andrenarchy</a><br>
+                <a href="https://github.com/andrenarchy">github.com/andrenarchy</a>
+              </p>
+              <h3>Slides</h3>
+              <p>
+                <a href="https://andrenarchy.github.io/2016-04-13-jspm-angular2-slides">
+                  andrenarchy.github.io/2016-04-13-jspm-angular2-slides
+                </a>
+              </p>
+            </div>
+          </div>
+          <div class="text-center" style="margin-top: 0.5em;">
+            PS:
+            <a href="https://paperhive.org">
+              <img src="img/paperhive.svg" style="height: 1.5em; vertical-align: bottom;">
+            </a>
+            is hiring Angular devs! :D
+           </div>
+        </div>
+      </slide>
+
+    </slides>
+  </body>
+</html>
