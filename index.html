@@ -143,6 +143,28 @@ console.log(fibo(4)); // 3</div>
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Module system challenges</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-12">
+              <div class="box">
+                <ul>
+                  <li>Resolve dependency tree</li>
+                  <li>Process external dependencies ()</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
               <div class="box">
                 <blockquote class="blockquote-reverse">
                   <p>
@@ -174,7 +196,25 @@ console.log(fibo(4)); // 3</div>
           <div class="row">
             <div class="col-md-12">
               <div class="box text-center">
-                <h1>Bundling challenges</h1>
+                <h1>Production</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-12">
+              <div class="box">
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Rough edges of JSPM</h1>
               </div>
             </div>
           </div>
@@ -182,8 +222,41 @@ console.log(fibo(4)); // 3</div>
             <div class="col-md-12">
               <div class="box">
                 <ul>
-                  <li>Resolve dependency tree</li>
-                  <li>Bundle</li>
+                  <li>Config is brittle (hey, it's beta!)</li>
+                  <li><code>jspm install</code> modifies <code>jspm.{browser,config}.js</code> and <code>package.json</code></li>
+                  <li>
+                    Keeping dependencies up-to-date requires manual interaction<br>
+                    (tools like <a href="https://greenkeeper.io/">greenkeeper</a>
+                    do not understand JSPM's config)
+                  </li>
+                  <li>Community small but growing</li>
+                  <li>
+                    <a href="https://github.com/guybedford">Guy Bedford</a>
+                    (JSPM+SystemJS dev) is super helpful if you run into
+                    trouble – Thanks for the awesome work, Guy!
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </slide>
+
+      <slide>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box text-center">
+                <h1>Not covered here</h1>
+              </div>
+            </div>
+          </div>
+          <div class="row sm-margin-top">
+            <div class="col-md-12">
+              <div class="box">
+                <ul>
+                  <li>Hot reloading: only reload modules that changed</li>
+                  <li>TypeScript with ES2016 (ES7!): <code>async/await</code>!</li>
                 </ul>
               </div>
             </div>
